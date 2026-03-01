@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Quantum-Seeded Dynamic QWT Framework
 
 > A production-ready, hybrid-language authentication system bridging Quantum Physics (Python/Qiskit) with Enterprise Security (Java Spring Boot/Redis).
@@ -140,3 +141,6 @@ jwt.high-risk-ttl-seconds=10
 ## 📜 License
 
 MIT License - Use freely for research and production.
+=======
+# QJwt
+>>>>>>> 67beae73a4139bc684236a77c5a1eca04fa5d838
