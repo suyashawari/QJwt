@@ -1,0 +1,64 @@
+# --- Java / Maven ---
+target/
+*.class
+*.jar
+*.war
+*.ear
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+mvnw
+mvnw.cmd
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+.venv
+*.egg-info/
+dist/
+build/
+
+# --- Node.js ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Optional: keep package-lock.json, or uncomment to ignore it
+# package-lock.json
+
+# --- OS metadata ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Redis / infrastructure ---
+dump.rdb
+*.rdb
+infrastructure/dump.rdb
+
+# --- IDE / editor files ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# --- Logs and temporary files ---
+*.log
+*.tmp
+*.temp
+walkthrough.md.resolved
+
+# --- Environment / secrets ---
+.env
+.env.local
+.env.*.local
