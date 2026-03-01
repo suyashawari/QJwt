@@ -1,0 +1,119 @@
+/* FuelGauge Component Styles */
+
+.fuel-gauge {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fuel-gauge:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card), var(--shadow-glow-cyan);
+}
+
+.gauge-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.gauge-icon {
+    font-size: 1.5rem;
+}
+
+.gauge-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.gauge-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: var(--space-lg) 0;
+}
+
+.gauge-canvas {
+    display: block;
+}
+
+.gauge-center {
+    position: absolute;
+    text-align: center;
+}
+
+.gauge-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient-quantum);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.gauge-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: var(--space-xs);
+}
+
+.gauge-percentage {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-top: var(--space-xs);
+}
+
+.gauge-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--status-color);
+    box-shadow: 0 0 10px var(--status-color);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.status-text {
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--status-color);
+}
+
+.gauge-thresholds {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.threshold {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.threshold-marker {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}

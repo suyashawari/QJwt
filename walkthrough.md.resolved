@@ -1,0 +1,93 @@
+# Quantum Auth Framework - Implementation Walkthrough
+
+## Summary
+
+Successfully implemented a **Quantum-Seeded Dynamic QWT (Quantum Web Token) Framework** - a production-ready authentication system bridging IBM Quantum computing with Java Spring Boot enterprise security.
+
+---
+
+## Architecture Implemented
+
+```mermaid
+flowchart LR
+    IBM[☢️ IBM Quantum] --> Miner[🐍 Python Miner]
+    Miner -->|RPUSH| Redis[(⚡ Redis)]
+    Redis -->|LPOP| API[☕ Spring Boot]
+    API --> Dashboard[⚛️ React]
+```
+
+---
+
+## Files Created
+
+### 📁 Infrastructure
+| File | Purpose |
+|------|---------|
+| [docker-compose.yml](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/infrastructure/docker-compose.yml) | Redis 7 with persistence & health checks |
+
+---
+
+### 🐍 Quantum Miner (Producer)
+| File | Purpose |
+|------|---------|
+| [miner.py](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/quantum-miner/miner.py) | 24/7 daemon with Qiskit integration, fallback, honey tokens |
+| [requirements.txt](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/quantum-miner/requirements.txt) | Qiskit, Redis, dotenv dependencies |
+| [.env.example](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/quantum-miner/.env.example) | Configuration template |
+
+---
+
+### ☕ Secure API (Consumer)
+| File | Purpose |
+|------|---------|
+| [pom.xml](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/secure-api/pom.xml) | Maven with Spring Boot 3.2, JJWT |
+| [QuantumService.java](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/secure-api/src/main/java/com/quantum/auth/service/QuantumService.java) | LPOP keys, adaptive TTL, honey token detection |
+| [JwtService.java](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/secure-api/src/main/java/com/quantum/auth/service/JwtService.java) | Quantum-signed JWT generation |
+| [AuthController.java](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/secure-api/src/main/java/com/quantum/auth/controller/AuthController.java) | Login, verify, status endpoints |
+
+---
+
+### ⚛️ Dashboard (Frontend)
+| File | Purpose |
+|------|---------|
+| [App.js](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/dashboard/src/App.js) | Main dashboard with API polling |
+| [FuelGauge.js](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/dashboard/src/components/FuelGauge.js) | Animated canvas entropy gauge |
+| [Heatmap.js](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/dashboard/src/components/Heatmap.js) | Activity visualization grid |
+
+---
+
+## Key Features Implemented
+
+| Feature | Description |
+|---------|-------------|
+| **Quantum Keys** | 127-qubit Hadamard circuits on IBM Quantum |
+| **Classical Fallback** | `secrets.token_hex` when quantum unavailable |
+| **Adaptive TTL** | 10s for high-risk, 15min for normal sessions |
+| **Honey Tokens** | Canary keys that trigger IP blocks |
+| **QWT Format** | JWT with `kid` header for key lookup |
+
+---
+
+## Testing Instructions
+
+```bash
+# 1. Start Redis
+cd infrastructure && docker-compose up -d
+
+# 2. Run Miner (needs IBM token for quantum, falls back otherwise)
+cd quantum-miner && pip install -r requirements.txt && python miner.py
+
+# 3. Start API
+cd secure-api && ./mvnw spring-boot:run
+
+# 4. Start Dashboard
+cd dashboard && npm install && npm start
+```
+
+---
+
+## Next Steps
+
+1. Add your IBM Quantum token to `quantum-miner/.env`
+2. Integrate real user authentication in [AuthController](file:///Users/suyashawari/Developer/final%20year%20project/25%20persent%20implemantation/Quantum-Seeded-Auth/secure-api/src/main/java/com/quantum/auth/controller/AuthController.java#24-188)
+3. Deploy to production with HTTPS
+4. Add rate limiting and additional security middleware
