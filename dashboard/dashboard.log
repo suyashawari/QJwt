@@ -18,3 +18,86 @@ Note that the development build is not optimized.
 To create a production build, use npm run build.
 
 webpack compiled successfully
+Compiling...
+Failed to compile.
+
+Module not found: SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: Expected property name or '}' in JSON at position 2
+ERROR in Module not found: SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: Expected property name or '}' in JSON at position 2
+
+ERROR in Module not found: SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: Expected property name or '}' in JSON at position 2
+
+ERROR in main
+Module not found: SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: Expected property name or '}' in JSON at position 2
+
+ERROR in Module not found: SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: /Users/suyashawari/Developer/final year project/100 persent implemantation/quantum-auth-framework/dashboard/package.json (directory description file): SyntaxError: Expected property name or '}' in JSON at position 2
+
+ERROR in Error: Child compilation failed:
+  Module not found: SyntaxError: /Users/suyashawari/Developer/final year project  /100 persent implemantation/quantum-auth-framework/dashboard/package.json (dir  ectory description file): SyntaxError: /Users/suyashawari/Developer/final year   project/100 persent implemantation/quantum-auth-framework/dashboard/package.j  son (directory description file): SyntaxError: /Users/suyashawari/Developer/fi  nal year project/100 persent implemantation/quantum-auth-framework/dashboard/p  ackage.json (directory description file): SyntaxError: /Users/suyashawari/Deve  loper/final year project/100 persent implemantation/quantum-auth-framework/das  hboard/package.json (directory description file): SyntaxError: /Users/suyashaw  ari/Developer/final year project/100 persent implemantation/quantum-auth-frame  work/dashboard/package.json (directory description file): SyntaxError: Expecte  d property name or '}' in JSON at position 2
+  ModuleNotFoundError: Module not found: SyntaxError: /Users/suyashawari/Develop  er/final year project/100 persent implemantation/quantum-auth-framework/dashbo  ard/package.json (directory description file): SyntaxError: /Users/suyashawari  /Developer/final year project/100 persent implemantation/quantum-auth-framewor  k/dashboard/package.json (directory description file): SyntaxError: /Users/suy  ashawari/Developer/final year project/100 persent implemantation/quantum-auth-  framework/dashboard/package.json (directory description file): SyntaxError: /U  sers/suyashawari/Developer/final year project/100 persent implemantation/quant  um-auth-framework/dashboard/package.json (directory description file): SyntaxE  rror: /Users/suyashawari/Developer/final year project/100 persent implemantati  on/quantum-auth-framework/dashboard/package.json (directory description file):   SyntaxError: Expected property name or '}' in JSON at position 2
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/webpack/lib/Compilation.js:2  073:28
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/webpack/lib/NormalModuleFact  ory.js:1041:13
+      at eval (eval at create (/Users/suyashawari/Developer/final year project/1  00 persent implemantation/quantum-auth-framework/dashboard/node_modules/tapabl  e/lib/HookCodeFactory.js:31:10), <anonymous>:10:1)
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/webpack/lib/NormalModuleFact  ory.js:437:22
+      at eval (eval at create (/Users/suyashawari/Developer/final year project/1  00 persent implemantation/quantum-auth-framework/dashboard/node_modules/tapabl  e/lib/HookCodeFactory.js:31:10), <anonymous>:9:1)
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/webpack/lib/NormalModuleFact  ory.js:622:22
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/webpack/lib/NormalModuleFact  ory.js:185:10
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/webpack/lib/NormalModuleFact  ory.js:856:23
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/webpack/lib/NormalModuleFact  ory.js:1351:5
+      at /Users/suyashawari/Developer/final year project/100 persent implemantat  ion/quantum-auth-framework/dashboard/node_modules/neo-async/async.js:2830:7
+  
+  - Compilation.js:2073 
+    [dashboard]/[webpack]/lib/Compilation.js:2073:28
+  
+  - NormalModuleFactory.js:1041 
+    [dashboard]/[webpack]/lib/NormalModuleFactory.js:1041:13
+  
+  
+  - NormalModuleFactory.js:437 
+    [dashboard]/[webpack]/lib/NormalModuleFactory.js:437:22
+  
+  
+  - NormalModuleFactory.js:622 
+    [dashboard]/[webpack]/lib/NormalModuleFactory.js:622:22
+  
+  - NormalModuleFactory.js:185 
+    [dashboard]/[webpack]/lib/NormalModuleFactory.js:185:10
+  
+  - NormalModuleFactory.js:856 
+    [dashboard]/[webpack]/lib/NormalModuleFactory.js:856:23
+  
+  - NormalModuleFactory.js:1351 
+    [dashboard]/[webpack]/lib/NormalModuleFactory.js:1351:5
+  
+  - async.js:2830 
+    [dashboard]/[neo-async]/async.js:2830:7
+  
+  - child-compiler.js:211 
+    [dashboard]/[html-webpack-plugin]/lib/child-compiler.js:211:18
+  
+  - Compiler.js:648 finalCallback
+    [dashboard]/[webpack]/lib/Compiler.js:648:5
+  
+  - Compiler.js:684 
+    [dashboard]/[webpack]/lib/Compiler.js:684:11
+  
+  - Compiler.js:1379 
+    [dashboard]/[webpack]/lib/Compiler.js:1379:17
+  
+  
+  - Hook.js:21 Hook.CALL_ASYNC_DELEGATE [as _callAsync]
+    [dashboard]/[tapable]/lib/Hook.js:21:14
+  
+  - Compiler.js:1375 
+    [dashboard]/[webpack]/lib/Compiler.js:1375:33
+  
+  - Compilation.js:3183 finalCallback
+    [dashboard]/[webpack]/lib/Compilation.js:3183:11
+  
+  - Compilation.js:3521 
+    [dashboard]/[webpack]/lib/Compilation.js:3521:11
+
+1 ERROR in child compilations (Use 'stats.children: true' resp. '--stats-children' for more details)
+webpack compiled with 6 errors
+Compiling...
+Compiled successfully!
+webpack compiled successfully
