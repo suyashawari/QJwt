@@ -1,0 +1,1 @@
+{"version":3,"file":"HoneyTokenTrap.d.ts","sourceRoot":"","sources":["../../src/core/HoneyTokenTrap.ts"],"names":[],"mappings":"AAAA;;;;;GAKG;AAEH,OAAO,KAAK,MAAM,SAAS,CAAC;AAW5B,qBAAa,eAAgB,SAAQ,KAAK;gBAC1B,OAAO,EAAE,MAAM;CAI9B;AAED,qBAAa,cAAc;IACvB,OAAO,CAAC,KAAK,CAAQ;gBAET,KAAK,EAAE,KAAK;IAIxB;;;OAGG;IACG,KAAK,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAAC,IAAI,CAAC;CAO1C"}

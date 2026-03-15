@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+quantum:
+  jwt:
+    # Set to false to run completely in-memory with direct IBM fetch (Standalone Mode)
+    redis-enabled: false
+    ibm-quantum-token: "Csym9dffULh28sSI9bZ4tLzTOYHBaWhR8wE9rYG4a68h"
+    ibm-backend-name: "ibm_fez"
+    token-ttl: 15m
+    issuer: "quantum-auth-demo"
+    ip-binding-enabled: true
+    watermark-secret: "quantum-super-secret-watermark"

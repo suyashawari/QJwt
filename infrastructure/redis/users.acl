@@ -1,0 +1,5 @@
+user default off
+user admin on >admin-password ~* +@all
+user miner on >miner-password ~entropy:pool ~miner_stats +RPUSH +LLEN +HINCRBY +HGETALL
+user app on >app-password ~entropy:pool ~key:* ~poison_keys ~blacklisted_ips +LPOP +GET +SET +EXPIRE +SADD +SISMEMBER +DEL
+user monitor on >monitor-password ~* +INFO +PING +LLEN +SCARD

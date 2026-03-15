@@ -1,0 +1,23 @@
+Metadata-Version: 2.1
+Name: quantum-jwt
+Version: 0.1.0
+Summary: Quantum‑resistant JWT authentication framework
+Home-page: https://github.com/your-repo/quantum-auth-framework
+Author: Your Name
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+# Quantum JWT Python Client
+
+A Python client for the Quantum JWT authentication framework.
+
+## Installation
+
+```bash
+pip install quantum-jwt
+

@@ -1,0 +1,48 @@
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+.metadata/
+bin/
+*.p12
+*.jks
+
+# Node / React
+node_modules/
+build/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+miner.log
+*.env
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Framework specific
+dashboard/build/
+java/quantum-jwt-starter/target/
+java/examples/spring-boot-app/target/
+
+# System generated
+.gemini/
+.system_generated/
+/tmp/

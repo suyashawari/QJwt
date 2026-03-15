@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First National Bank - Security Demo</title>
+    <style>
+        :root {
+            /* Bank Theme */
+            --bank-bg: #f8fafc;
+            --bank-surface: #ffffff;
+            --bank-text: #1e293b;
+            --bank-primary: #0284c7;
+            --bank-border: #cbd5e1;
+            --bank-success: #10b981;
+            
+            /* Hacker Theme */
+            --hack-bg: #0f172a;
+            --hack-surface: #1e293b;
+            --hack-text: #22c55e;
+            --hack-border: #334155;
+            --hack-error: #ef4444;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh; display: flex; flex-direction: column;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+
+        header {
+            text-align: center; padding: 1.5rem;
+            background: var(--bank-primary); color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        header h1 { margin: 0; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.5px; }
+        header p { margin: 0.5rem 0 1rem 0; opacity: 0.9; font-size: 0.9rem; }
+
+        .scenario-selector-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .scenario-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            width: auto;
+            margin-bottom: 0;
+        }
+
+        .scenario-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .scenario-btn.active {
+            background: white;
+            color: var(--bank-primary);
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .split-container {
+            display: flex; flex: 1; overflow: hidden;
+        }
+
+        /* --- PANELS --- */
+        .panel {
+            flex: 1; padding: 2rem 4rem;
+            overflow-y: auto;
+        }
+        
+        .panel.bank {
+            background: var(--bank-bg); color: var(--bank-text);
+            border-right: 2px solid #94a3b8;
+        }
+
+        .panel.hacker {
+            background: var(--hack-bg); color: var(--hack-text);
+            font-family: monospace;
+        }
+
+        .panel h2 { margin-top: 0; border-bottom: 2px solid; padding-bottom: 0.5rem; }
+        .panel.bank h2 { color: var(--bank-primary); border-color: var(--bank-border); }
+        .panel.hacker h2 { color: white; border-color: var(--hack-border); font-family: sans-serif; }
+        
+        .panel-desc { margin-top: -5px; margin-bottom: 2rem; font-size: 0.95rem; }
+        .bank .panel-desc { color: #64748b; }
+        .hacker .panel-desc { color: #94a3b8; font-family: sans-serif; }
+
+        .auth-card {
+            background: var(--bank-surface); border: 1px solid var(--bank-border);
+            border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Inputs & Buttons */
+        input {
+            width: 100%; padding: 0.75rem; margin-bottom: 1rem;
+            border: 1px solid var(--bank-border); border-radius: 4px; box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999;
+            display: flex; flex-direction: column; gap: 0.5rem;
+        }
+        .toast {
+            padding: 0.8rem 1.2rem; border-radius: 8px; color: white;
+            font-size: 0.9rem; font-weight: 500; min-width: 260px; max-width: 400px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25); animation: toastIn 0.35s ease-out;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .toast.success { background: #16a34a; }
+        .toast.error   { background: #dc2626; }
+        .toast.info    { background: #2563eb; }
+        .toast.warn    { background: #d97706; }
+        @keyframes toastIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes toastOut { from { opacity:1; } to { opacity:0; transform:translateX(40px); } }
+
+        /* Protocol Toggle Switch */
+        .protocol-toggle {
+            display: flex; border-radius: 6px; overflow: hidden;
+            border: 1px solid var(--bank-border); margin-bottom: 1rem;
+        }
+        .bank .protocol-toggle button,
+        .protocol-toggle button {
+            flex: 1; margin: 0; border: none; border-radius: 0; padding: 0.6rem 0.5rem;
+            font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            background: #ffffff !important; color: #94a3b8 !important; transition: all 0.2s;
+            border-right: 1px solid var(--bank-border);
+        }
+        .protocol-toggle button:last-child { border-right: none; }
+        .bank .protocol-toggle button.active,
+        .protocol-toggle button.active {
+            background: var(--bank-primary) !important; color: white !important;
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15);
+        }
+        .bank .protocol-toggle button:not(.active):hover,
+        .protocol-toggle button:not(.active):hover {
+            background: #f1f5f9 !important; color: #475569 !important;
+        }
+
+        button {
+            width: 100%; padding: 0.75rem; border: none; border-radius: 4px;
+            font-weight: bold; cursor: pointer; transition: all 0.2s; font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bank button { background: var(--bank-primary); color: white; }
+        .bank button:hover { background: #0369a1; }
+        .bank button.secondary { background: white; color: var(--bank-primary); border: 1px solid var(--bank-primary); }
+        .bank button.secondary:hover { background: #f0f9ff; }
+        .bank button.danger { background: #ef4444; color: white; }
+        .bank button.danger:hover { background: #dc2626; }
+
+        .hacker button {
+            border: 1px solid var(--hack-text); background: transparent; color: var(--hack-text); font-family: monospace;
+        }
+        .hacker button:hover { background: rgba(34, 197, 94, 0.1); box-shadow: 0 0 10px rgba(34, 197, 94, 0.2); }
+        .hacker button:disabled { border-color: #475569; color: #475569; cursor: not-allowed; box-shadow: none; background: transparent; }
+
+        /* Data Blocks */
+        .data-block { padding: 1rem; border-radius: 4px; margin-top: 1rem; border: 1px solid; }
+        .data-block h4 { margin: 0 0 0.5rem 0; }
+        .data-block pre { margin: 0; font-family: monospace; white-space: pre-wrap; font-size: 0.9rem; }
+        
+        .data-success { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
+        .data-success h4 { color: #166534; }
+        .data-error { background: #fef2f2; border-color: #fecaca; color: #7f1d1d; }
+        .data-error h4 { color: #b91c1c; }
+        .data-alert { background: #ffe4e6; border-color: #fecdd3; color: #881337; border-width: 2px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3) inset;}
+        .data-alert h4 { color: #e11d48; text-transform: uppercase; animation: blink 1s infinite;}
+
+        @keyframes blink { 0% {opacity:1;} 50% {opacity:0.5;} 100% {opacity:1;} }
+
+        /* Terminals */
+        .terminal {
+            background: black; border: 1px solid var(--hack-border);
+            border-radius: 4px; padding: 1rem; margin-bottom: 1.5rem;
+            font-size: 0.85rem; min-height: 100px;
+        }
+        .log-success { color: var(--hack-text); margin-bottom: 4px;}
+        .log-error { color: var(--hack-error); margin-bottom: 4px;}
+        .log-info { color: #38bdf8; margin-bottom: 4px;}
+        .log-warn { color: #fbbf24; margin-bottom: 4px;}
+
+        .stolen-token { word-break: break-all; color: #94a3b8; font-size: 0.75rem; margin-top: 0.5rem; height: 60px; overflow-y: hidden; }
+
+        /* Helpers */
+        .hidden { display: none !important; }
+        .flex { display: flex; gap: 0.5rem; }
+
+        /* Responsive Design */
+        @media (max-width: 1000px) {
+            body, html {
+                overflow-y: auto;
+            }
+            .split-container {
+                flex-direction: column;
+                overflow: visible;
+            }
+            .panel {
+                overflow-y: visible;
+                padding: 1.5rem 2rem;
+                padding-bottom: 3rem;
+                border-right: none;
+            }
+            .panel.bank {
+                border-bottom: 4px solid var(--bank-primary);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <header>
+        <h1>First National Bank</h1>
+        <p>Enterprise Security Simulations</p>
+        <div class="scenario-selector-container" id="scenarioSelector">
+            <button class="scenario-btn active" onclick="switchScenario('hijack')" id="btn-hijack">1. Session Hijacking</button>
+            <button class="scenario-btn" onclick="switchScenario('honeytoken')" id="btn-honeytoken">2. Data Breach (Honey Tokens)</button>
+            <button class="scenario-btn" onclick="switchScenario('watermark')" id="btn-watermark">3. Proof of Source</button>
+            <button class="scenario-btn" onclick="switchScenario('fallback')" id="btn-fallback">4. Zero-Downtime Fallback</button>
+        </div>
+    </header>
+
+    <div class="split-container">
+        
+        <!-- ================= BANK PANEL (Victim/System) ================= -->
+        <div class="panel bank">
+            
+            <!-- SCENARIO 1: Session Hijacking (Victim) -->
+            <div id="bank-scenario-hijack" class="scenario-view">
+                <h2>The Victim</h2>
+                <p class="panel-desc">A legitimate user logging into their bank account from home.</p>
+
+                <div id="bankLoginSection" class="auth-card">
+                    <h3 style="margin-top:0;">Login to Online Banking</h3>
+                    <label style="font-size: 0.85rem; font-weight: bold; color: #475569; margin-bottom: 4px; display:block;">Select Security Protocol:</label>
+                    <div class="protocol-toggle" id="authTypeToggle">
+                        <button class="active" data-value="std" onclick="setProtocol('authTypeToggle','std')">Standard Auth (Vulnerable)</button>
+                        <button data-value="q" onclick="setProtocol('authTypeToggle','q')">Quantum Auth (Secure)</button>
+                    </div>
+                    <input type="text" id="username" placeholder="Username (e.g. alice)" value="alice">
+                    <input type="password" id="password" placeholder="Password" value="password123">
+                    <div class="flex">
+                        <button class="secondary" style="flex: 1;" onclick="registerVictim()">Sign Up</button>
+                        <button style="flex: 2;" onclick="loginVictim()">Secure Login</button>
+                    </div>
+                </div>
+
+                <div id="bankDashboardSection" class="auth-card hidden">
+                    <h3 id="welcomeMsg" style="color: var(--bank-primary); margin-top:0;">Welcome back.</h3>
+                    <p style="color: #64748b; font-size: 0.9rem;">You are securely authenticated. Your session token is stored in your browser.</p>
+                    <button onclick="fetchVictimData()">View Account Balance</button>
+                    <button class="secondary" onclick="logoutVictim()">Logout</button>
+
+                    <div id="victimData" class="data-block data-success hidden">
+                        <h4>Confidential Account Data</h4>
+                        <pre id="victimPayload"></pre>
+                    </div>
+                    
+                    <div id="victimError" class="data-block data-error hidden">
+                        <h4>Access Denied</h4>
+                        <pre id="victimErrorPayload"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCENARIO 2: Honey Tokens (Developer) -->
+            <div id="bank-scenario-honeytoken" class="scenario-view hidden">
+                <h2>The Developer</h2>
+                <p class="panel-desc">A bank employee configuring environment variables for a microservice.</p>
+                
+                <div class="auth-card">
+                    <h3 style="margin-top:0;">Generate Environment Keys</h3>
+                    <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem;">Generate a decoy key (Honey Token) to place in public repositories or fake endpoints to trap attackers.</p>
+                    <button class="danger" onclick="generateHoneyToken()">Generate Honey Token</button>
+                    <button class="secondary" onclick="resetHoneyScenario()">Reset Simulation</button>
+
+                    <div id="honeyTokenDisplay" class="data-block data-success hidden">
+                        <h4>Trap Key Generated</h4>
+                        <p style="font-size:0.85rem; margin-bottom:5px;">This looks like a real Quantum JWT, but using it will trigger an instant Red Alert.</p>
+                        <pre id="honeyTokenValue" style="word-break: break-all; font-size: 0.75rem; color: #64748b;"></pre>
+                    </div>
+                </div>
+
+                <div id="bankAlertSection" class="auth-card hidden" style="border-color: #fecdd3; background: #fff1f2;">
+                    <h3 style="margin-top:0; color: #e11d48; display:flex; align-items:center;">
+                        <span style="display:inline-block; width:12px; height:12px; background:#e11d48; border-radius:50%; margin-right:8px; animation:blink 1s infinite;"></span>
+                        SYSTEM BREACH DETECTED
+                    </h3>
+                    <p style="font-size: 0.9rem; color: #881337;">A decoy Honey Token was just activated. The attacker's IP has been logged and the SOC team has been notified.</p>
+                    
+                    <div class="data-block data-alert">
+                        <h4>Incident Report</h4>
+                        <pre id="alertPayload"></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SCENARIO 3: Quantum Watermark (Auditor) -->
+            <div id="bank-scenario-watermark" class="scenario-view hidden">
+                <h2>The Compliance Auditor</h2>
+                <p class="panel-desc">An auditor verifying that active session keys use true quantum entropy.</p>
+                
+                <div class="auth-card" id="wmLoginSection">
+                    <h3 style="margin-top:0;">Session Generation</h3>
+                    <label style="font-size: 0.85rem; font-weight: bold; color: #475569; margin-bottom: 4px; display:block;">Select Security Protocol:</label>
+                    <div class="protocol-toggle" id="wmAuthTypeToggle">
+                        <button class="active" data-value="std" onclick="setProtocol('wmAuthTypeToggle','std')">Standard Auth (Pseudo-Random)</button>
+                        <button data-value="q" onclick="setProtocol('wmAuthTypeToggle','q')">Quantum Auth (IBM Source)</button>
+                    </div>
+                    <input type="text" id="wmUsername" placeholder="Username" value="auditor_test">
+                    <input type="password" id="wmPassword" placeholder="Password" value="password123">
+                    <button onclick="loginAuditor()">Login and Capture Token</button>
+                </div>
+
+                <div id="wmDashboardSection" class="auth-card hidden">
+                    <h3 style="color: var(--bank-primary); margin-top:0;">Active Session Found</h3>
+                    <p style="color: #64748b; font-size: 0.9rem;">Token successfully generated. Verify the cryptographic origin of this token.</p>
+                    <button onclick="auditSessionToken()">Verify Entropy Source</button>
+                    <button class="secondary" onclick="resetAuditor()">Clear Session</button>
+
+                    <div id="wmAuditResult" class="data-block hidden">
+                        <h4 id="wmAuditTitle">Audit Report</h4>
+                        <pre id="wmAuditPayload"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCENARIO 4: Zero-Downtime Fallback (System Admin) -->
+            <div id="bank-scenario-fallback" class="scenario-view hidden">
+                <h2>The System Administrator</h2>
+                <p class="panel-desc">Monitoring cluster health and ensuring uptime during a Redis blackout.</p>
+                
+                <div class="auth-card">
+                    <h3 style="margin-top:0;">Cluster Management</h3>
+                    <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem;">Simulate a catastrophic Redis Database crash. In standard applications, this would take the auth service offline.</p>
+                    <button class="danger" id="crashBtn" onclick="toggleRedisCrash(true)">[ KILL ] Redis Service</button>
+                    <button class="secondary" id="restoreBtn" onclick="toggleRedisCrash(false)" disabled>[ START ] Redis Service</button>
+
+                    <div id="sysStatusViewer" class="data-block data-success" style="margin-top: 1.5rem;">
+                        <h4 id="sysStatusTitle">System Status: HEALTHY</h4>
+                        <pre id="sysStatusPayload">Redis Connection: ONLINE
+Entropy Source: QUANTUM POOL</pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= HACKER PANEL (Attacker) ================= -->
+        <div class="panel hacker">
+            <h2>The Attacker</h2>
+            
+            <!-- SCENARIO 1: Session Hijacking (Attacker) -->
+            <div id="hack-scenario-hijack" class="scenario-view">
+                <p class="panel-desc">A hacker at a coffee shop sniffing Wi-Fi traffic to steal tokens.</p>
+                <p style="margin:0 0 0.5rem 0;">&gt; Intercepted Token Payload:</p>
+                <div class="terminal">
+                    <div id="stolenTokenBox" class="stolen-token">[ Waiting to intercept traffic on port 8080... ]</div>
+                </div>
+                <button id="hijackBtn" onclick="performHijackAttack()" disabled>[ EXECUTE ] Replay Stolen Token</button>
+            </div>
+
+            <!-- SCENARIO 2: Honey Tokens (Attacker) -->
+            <div id="hack-scenario-honeytoken" class="scenario-view hidden">
+                <p class="panel-desc">A hacker scanning GitHub for leaked `.env` files and API keys.</p>
+                <p style="margin:0 0 0.5rem 0;">&gt; Scraper Output:</p>
+                <div class="terminal" id="scraperTerminal">
+                    <div class="log-info">Scanning public repositories for pattern 'JWT='...</div>
+                    <div class="log-info" id="scraperStatus">Awaiting leaked credentials...</div>
+                </div>
+                <button id="honeyUseBtn" onclick="performHoneyAttack()" disabled>[ EXECUTE ] Use Leaked Token</button>
+            </div>
+
+            <!-- SCENARIO 3: Quantum Watermark (Hacker/Logs) -->
+            <div id="hack-scenario-watermark" class="scenario-view hidden">
+                <p class="panel-desc">Monitoring the generated JWT payload for cryptographic proof of origin.</p>
+                <p style="margin:0 0 0.5rem 0;">&gt; Intercepted Token Payload:</p>
+                <div class="terminal">
+                    <div id="wmRawTokenBox" class="stolen-token" style="height: auto;">[ Waiting for token generation... ]</div>
+                </div>
+            </div>
+
+            <!-- SCENARIO 4: Zero-Downtime Fallback (Victim Experience) -->
+            <div id="hack-scenario-fallback" class="scenario-view hidden">
+                <h2>The Victim</h2>
+                <p class="panel-desc" style="color:#94a3b8; font-family:sans-serif;">Attempting to login while the database is down...</p>
+                
+                <div class="terminal" style="background:var(--bank-surface); color:var(--bank-text); border-color:var(--bank-border); font-family:sans-serif;">
+                    <h3 style="margin-top:0;">Login to Online Banking</h3>
+                    <input type="text" id="fbUsername" placeholder="Username" value="alice_fallback" style="width:100%; border:1px solid #ccc; padding:0.5rem; margin-bottom:0.5rem; box-sizing:border-box;">
+                    <input type="password" id="fbPassword" placeholder="Password" value="password123" style="width:100%; border:1px solid #ccc; padding:0.5rem; margin-bottom:1rem; box-sizing:border-box;">
+                    <button style="background:var(--bank-primary); color:white; width:100%; padding:0.5rem; border:none; cursor:pointer;" onclick="loginFallbackVictim()">Secure Login</button>
+                </div>
+                
+                <p style="margin:1rem 0 0.5rem 0;">&gt; Auth Service Response:</p>
+                <div class="terminal">
+                    <div id="fbResultBox" class="stolen-token" style="height: auto;">[ Awaiting login attempt... ]</div>
+                </div>
+            </div>
+
+            <!-- SHARED HACKER CONSOLE -->
+            <p style="margin:2rem 0 0.5rem 0;">&gt; Attack Output Console:</p>
+            <div class="terminal" id="hackConsole">
+                <div class="log-info">Listener active...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MAIN SCRIPT -->
+    <script>
+        // --- TOAST NOTIFICATION ---
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: '✅', error: '❌', info: 'ℹ️', warn: '⚠️' };
+            toast.innerHTML = `<span>${icons[type] || ''}</span><span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'toastOut 0.3s ease-in forwards'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        // --- PROTOCOL TOGGLE ---
+        function setProtocol(toggleId, value) {
+            const toggle = document.getElementById(toggleId);
+            toggle.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            toggle.querySelector(`[data-value="${value}"]`).classList.add('active');
+        }
+        function getProtocol(toggleId) {
+            return document.getElementById(toggleId).querySelector('.active').dataset.value;
+        }
+
+        // --- GLOBAL STATE ---
+        let currentAuthType = 'std';
+        let activeToken = null;
+        let stolenToken = null;
+        let honeyTokenStr = null;
+
+        // --- SCENARIO SWITCHER ---
+        function switchScenario(scenario) {
+            // Update buttons visually
+            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${scenario}`).classList.add('active');
+            
+            // Hide all views
+            document.querySelectorAll('.scenario-view').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected views
+            document.getElementById(`bank-scenario-${scenario}`).classList.remove('hidden');
+            document.getElementById(`hack-scenario-${scenario}`).classList.remove('hidden');
+
+            // Reset Consoles
+            document.getElementById('hackConsole').innerHTML = '<div class="log-info">Listener active...</div>';
+            
+            if(scenario === 'hijack') {
+                logoutVictim();
+            } else if (scenario === 'honeytoken') {
+                resetHoneyScenario();
+            } else if (scenario === 'watermark') {
+                resetAuditor();
+            } else if (scenario === 'fallback') {
+                toggleRedisCrash(false); // Reset to healthy
+                document.getElementById('fbResultBox').innerText = "[ Awaiting login attempt... ]";
+            }
+        }
+
+        // --- LOGGING ---
+        function logToConsole(msg, className) {
+            const consoleEl = document.getElementById('hackConsole');
+            const newLog = document.createElement('div');
+            newLog.className = className;
+            newLog.innerText = `> ${msg}`;
+            consoleEl.appendChild(newLog);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+
+        // ==========================================
+        // SCENARIO 1: SESSION HIJACKING
+        // ==========================================
+        async function registerVictim() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            if (!user || !pass) return showToast("Enter credentials", "warn");
+            try {
+                const res = await fetch(`/api/auth/signup`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username: user, password: pass })
+                });
+                const data = await res.json();
+                if (res.ok) showToast(`Registered account for ${user}. Ready to login.`, 'success');
+                else showToast(data.error, 'error');
+            } catch (e) { showToast("Network error", 'error'); }
+        }
+
+        async function loginVictim() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            currentAuthType = getProtocol('authTypeToggle');
+            if (!user || !pass) return showToast("Enter credentials", "warn");
+
+            const endpoint = currentAuthType === 'std' ? '/api/auth/standard/token' : '/api/auth/token';
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username: user, password: pass })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                
+                activeToken = data.token;
+                document.getElementById('welcomeMsg').innerText = `Welcome back, ${user}.`;
+                document.getElementById('bankLoginSection').classList.add('hidden');
+                document.getElementById('bankDashboardSection').classList.remove('hidden');
+                document.getElementById('victimData').classList.add('hidden');
+                document.getElementById('victimError').classList.add('hidden');
+
+                // Simulate theft
+                stolenToken = activeToken;
+                document.getElementById('stolenTokenBox').innerText = stolenToken;
+                document.getElementById('stolenTokenBox').style.color = "#22c55e"; 
+                logToConsole(`SUCCESS: Intercepted ${currentAuthType === 'std' ? "Standard" : "Quantum"} JWT payload!`, 'log-warn');
+                document.getElementById('hijackBtn').disabled = false;
+            } catch (e) { showToast(`Login Failed: ${e.message}`, 'error'); }
+        }
+
+        async function fetchVictimData() {
+            const endpoint = currentAuthType === 'std' ? '/api/auth/standard/validate' : '/api/secure/data';
+            document.getElementById('victimData').classList.add('hidden');
+            document.getElementById('victimError').classList.add('hidden');
+            try {
+                const res = await fetch(endpoint, { headers: { 'Authorization': `Bearer ${activeToken}` } });
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('victimData').classList.remove('hidden');
+                    if (currentAuthType === 'std') {
+                        data.message = "First National Bank - Standard Vault";
+                        data.accountBalance = "$1,452,890.00";
+                    }
+                    document.getElementById('victimPayload').innerText = JSON.stringify(data, null, 2);
+                } else {
+                    document.getElementById('victimError').classList.remove('hidden');
+                    document.getElementById('victimErrorPayload').innerText = "ERROR: " + data.error;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function logoutVictim() {
+            activeToken = null; stolenToken = null;
+            document.getElementById('bankLoginSection').classList.remove('hidden');
+            document.getElementById('bankDashboardSection').classList.add('hidden');
+            document.getElementById('victimData').classList.add('hidden');
+            document.getElementById('victimError').classList.add('hidden');
+            document.getElementById('stolenTokenBox').innerText = "[ Waiting to intercept traffic... ]";
+            document.getElementById('stolenTokenBox').style.color = "#94a3b8";
+            document.getElementById('hijackBtn').disabled = true;
+        }
+
+        async function performHijackAttack() {
+            if (!stolenToken) return;
+            logToConsole('Initiating Replay Attack to steal bank data...', 'log-warn');
+            const endpoint = currentAuthType === 'std' ? '/api/auth/standard/validate' : '/api/secure/data';
+            try {
+                const res = await fetch(endpoint, {
+                    headers: { 'Authorization': `Bearer ${stolenToken}`, 'X-Forwarded-For': '192.168.99.200' }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    logToConsole('ATTACK SUCCESSFUL! Identity Spoofed. Bank Data Acquired.', 'log-success');
+                    logToConsole(`Stolen Balance: ${data.accountBalance || "$1,452,890.00"}`, 'log-success');
+                } else {
+                    logToConsole(`ATTACK BLOCKED! Server responded with 403 Forbidden`, 'log-error');
+                    logToConsole(`Error Reason: ${data.error}`, 'log-error');
+                }
+            } catch (e) { logToConsole(`Connection failed: ${e.message}`, 'log-error'); }
+        }
+
+
+        // ==========================================
+        // SCENARIO 2: HONEY TOKENS
+        // ==========================================
+        async function generateHoneyToken() {
+            try {
+                const res = await fetch('/api/auth/honey-token', { method: 'POST' });
+                const data = await res.json();
+                honeyTokenStr = data.token;
+                
+                document.getElementById('honeyTokenDisplay').classList.remove('hidden');
+                document.getElementById('bankAlertSection').classList.add('hidden');
+                document.getElementById('honeyTokenValue').innerText = honeyTokenStr;
+
+                // Simulate Hacker Scraper finding the token
+                const scraperStatus = document.getElementById('scraperStatus');
+                scraperStatus.innerHTML = `> FOUND MATCH IN commit <span style="color:#22c55e">8a7f920</span>:<br><div class="stolen-token" style="color:#22c55e; height:auto; margin-top:5px;">JWT=${honeyTokenStr}</div>`;
+                document.getElementById('honeyUseBtn').disabled = false;
+                logToConsole("Scraper successfully extracted JWT from leaked `.env` file.", "log-warn");
+
+            } catch(e) { showToast("Failed to generate Honey Token: " + e.message, 'error'); }
+        }
+
+        function resetHoneyScenario() {
+            honeyTokenStr = null;
+            document.getElementById('honeyTokenDisplay').classList.add('hidden');
+            document.getElementById('bankAlertSection').classList.add('hidden');
+            document.getElementById('honeyUseBtn').disabled = true;
+            document.getElementById('scraperStatus').innerText = "Awaiting leaked credentials...";
+            document.getElementById('hackConsole').innerHTML = '<div class="log-info">Listener active...</div>';
+        }
+
+        async function performHoneyAttack() {
+            if(!honeyTokenStr) return;
+            logToConsole("Attempting to access Protected API using leaked token...", "log-warn");
+            
+            try {
+                const res = await fetch('/api/secure/data', {
+                    headers: { 'Authorization': `Bearer ${honeyTokenStr}`, 'X-Forwarded-For': '85.23.109.11' }
+                });
+                const data = await res.json();
+                
+                if (res.status === 403 || res.status === 401) {
+                    logToConsole(`ATTACK FAILED. Server closed connection (403 Forbidden).`, "log-error");
+                    
+                    // Show Bank Alert
+                    document.getElementById('bankAlertSection').classList.remove('hidden');
+                    document.getElementById('alertPayload').innerText = JSON.stringify({
+                        alertType: "HONEY_TOKEN_TRIGGERED",
+                        severity: "CRITICAL",
+                        attackerIP: "85.23.109.11",
+                        actionTaken: "IP Blocked, Token Revoked, SOC Notified",
+                        message: data.error
+                    }, null, 2);
+                } else {
+                    logToConsole("ATTACK SUCCESS", "log-success");
+                }
+            } catch(e) {
+                logToConsole("Connection error " + e, "log-error");
+            }
+        }
+
+        // ==========================================
+        // SCENARIO 3: QUANTUM WATERMARK
+        // ==========================================
+        let wmActiveToken = null;
+
+        async function loginAuditor() {
+            const user = document.getElementById('wmUsername').value;
+            const pass = document.getElementById('wmPassword').value;
+            const authType = getProtocol('wmAuthTypeToggle');
+            
+            // Register first
+            await fetch(`/api/auth/signup`, {
+                method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ username: user, password: pass })
+            });
+
+            const endpoint = authType === 'std' ? '/api/auth/standard/token' : '/api/auth/token';
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username: user, password: pass })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                
+                wmActiveToken = data.token;
+                document.getElementById('wmLoginSection').classList.add('hidden');
+                document.getElementById('wmDashboardSection').classList.remove('hidden');
+                document.getElementById('wmRawTokenBox').innerText = wmActiveToken;
+                document.getElementById('wmRawTokenBox').style.color = "#22c55e";
+                
+                logToConsole(`New Session Initiated via ${authType === 'std' ? "Standard" : "Quantum"} Framework.`, "log-info");
+                logToConsole(`Raw Token Payload Captured in Interceptor.`, "log-warn");
+            } catch (e) { showToast(`Login Failed: ${e.message}`, 'error'); }
+        }
+
+        async function auditSessionToken() {
+            if (!wmActiveToken) return;
+            logToConsole("Requesting cryptographic audit of token...", "log-warn");
+            
+            try {
+                const res = await fetch('/api/secure/audit', {
+                    headers: { 'Authorization': `Bearer ${wmActiveToken}` }
+                });
+                const data = await res.json();
+                
+                const viewer = document.getElementById('wmAuditResult');
+                viewer.classList.remove('hidden', 'data-success', 'data-error', 'data-alert');
+                
+                if (res.ok) {
+                    if (data.quantumWatermarkValid) {
+                        viewer.classList.add('data-success');
+                        document.getElementById('wmAuditTitle').innerText = "✅ QUANTUM ORIGIN VERIFIED";
+                        logToConsole("Audit Success: True Quantum Entropy Verified via Watermark.", "log-success");
+                    } else {
+                        viewer.classList.add('data-error'); 
+                        document.getElementById('wmAuditTitle').innerText = "⚠️ CLASSICAL ENTROPY DETECTED";
+                        logToConsole("Audit Warning: No quantum watermark found in token claims.", "log-warn");
+                    }
+                    document.getElementById('wmAuditPayload').innerText = JSON.stringify(data, null, 2);
+                } else {
+                    viewer.classList.add('data-error');
+                    document.getElementById('wmAuditTitle').innerText = "❌ AUDIT FAILED";
+                    document.getElementById('wmAuditPayload').innerText = JSON.stringify({
+                        error: data.error,
+                        reason: "Token lacks Quantum Hardware Signature or valid 'kid' header."
+                    }, null, 2);
+                    logToConsole("Audit Failed: Token rejected by Quantum Evaluator.", "log-error");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function resetAuditor() {
+            wmActiveToken = null;
+            document.getElementById('wmLoginSection').classList.remove('hidden');
+            document.getElementById('wmDashboardSection').classList.add('hidden');
+            document.getElementById('wmAuditResult').classList.add('hidden');
+            document.getElementById('wmRawTokenBox').innerText = "[ Waiting for token generation... ]";
+            document.getElementById('wmRawTokenBox').style.color = "#94a3b8";
+        }
+
+        // ==========================================
+        // SCENARIO 4: ZERO-DOWNTIME FALLBACK
+        // ==========================================
+        let isRedisDead = false;
+
+        async function toggleRedisCrash(crash) {
+            isRedisDead = crash;
+            try {
+                const res = await fetch(`/api/admin/simulate-redis-crash?crash=${crash}`, { method: 'POST' });
+                const data = await res.json();
+                
+                document.getElementById('crashBtn').disabled = crash;
+                document.getElementById('restoreBtn').disabled = !crash;
+
+                const statusViewer = document.getElementById('sysStatusViewer');
+                statusViewer.classList.remove('data-success', 'data-error', 'data-alert');
+                
+                if (crash) {
+                    statusViewer.classList.add('data-error');
+                    document.getElementById('sysStatusTitle').innerText = "System Status: FAILOVER ACTIVE";
+                    document.getElementById('sysStatusPayload').innerText = "Redis Connection: OFFLINE\nEntropy Source: LOCAL CLASSICAL FALLBACK";
+                    logToConsole("CRITICAL: Redis connection lost! Resilient Entropy Pool engaged.", "log-error");
+                } else {
+                    statusViewer.classList.add('data-success');
+                    document.getElementById('sysStatusTitle').innerText = "System Status: HEALTHY";
+                    document.getElementById('sysStatusPayload').innerText = "Redis Connection: ONLINE\nEntropy Source: QUANTUM POOL";
+                    logToConsole("INFO: Redis connection restored.", "log-info");
+                }
+            } catch(e) {
+                showToast("Failed to toggle crash state.", 'error');
+            }
+        }
+
+        async function loginFallbackVictim() {
+            const user = document.getElementById('fbUsername').value;
+            const pass = document.getElementById('fbPassword').value;
+            
+            // Register first
+            await fetch(`/api/auth/signup`, {
+                method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ username: user, password: pass })
+            });
+
+            logToConsole(`Victim attempting login... Redis is currently ${isRedisDead ? 'OFFLINE' : 'ONLINE'}.`, "log-warn");
+            
+            try {
+                const res = await fetch('/api/auth/token', {
+                    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username: user, password: pass })
+                });
+                const data = await res.json();
+                
+                const resultBox = document.getElementById('fbResultBox');
+                if (res.ok) {
+                    resultBox.innerText = `SUCCESS! Token Generated: \n${data.token}\n\n(Login successful despite Database Status)`;
+                    resultBox.style.color = "#22c55e";
+                    logToConsole("Login Request Succeeded. Service was not interrupted.", "log-success");
+                } else {
+                    resultBox.innerText = `FAILED: ${data.error}`;
+                    resultBox.style.color = "#ef4444";
+                    logToConsole(`Login Failed. ${data.error}`, "log-error");
+                }
+            } catch (e) {
+                document.getElementById('fbResultBox').innerText = `CRASH: Service Unreachable.`;
+                document.getElementById('fbResultBox').style.color = "#ef4444";
+                logToConsole("Service Offline. Login Failed.", "log-error");
+            }
+        }
+
+    </script>
+</body>
+</html>

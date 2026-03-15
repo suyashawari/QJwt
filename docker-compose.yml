@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # 1. High-Performance Entropy Store
+  redis:
+    image: redis:7-alpine
+    container_name: quantum-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # 2. Real-Time Quantum Miner (The Engine)
+  quantum-miner:
+    build:
+      context: ./quantum-miner
+    container_name: quantum-miner
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./quantum-miner/.env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    restart: always
+
+  # 3. Live Metrics Dashboard (Optional but helpful)
+  dashboard:
+    build:
+      context: ./dashboard
+    container_name: quantum-dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost:8080/api
+    depends_on:
+      - redis

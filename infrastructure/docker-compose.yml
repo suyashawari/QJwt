@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # 1. The Data Store
+  redis:
+    image: redis:7.2-alpine
+    container_name: quantum_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/users.acl:/usr/local/etc/redis/users.acl
+      - redis_data:/data
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-u", "redis://default:off@localhost:6379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - quantum_net
+
+  # 2. The Entropy Producer
+  quantum-miner:
+    build:
+      context: ../quantum-miner
+      dockerfile: Dockerfile
+    container_name: quantum_miner
+    depends_on:
+      redis:
+        condition: service_started
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=miner-password
+      - MIN_POOL_SIZE=100
+      - MAX_POOL_SIZE=1000
+    networks:
+      - quantum_net
+
+  # 3. Observability — Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: quantum_prom
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - quantum_net
+
+  # 4. Observability — Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: quantum_grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=quantum-admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - quantum_net
+
+networks:
+  quantum_net:
+    driver: bridge
+
+volumes:
+  redis_data:
+  grafana_data:
